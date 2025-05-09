@@ -66,11 +66,17 @@ for i, ts in enumerate(time_series_list):
 #########################################################################################
 ###################delete non-matching shaped samples####################################
 
+deleted_count = 0
+
 for i, ts in enumerate(time_series_list):
     if ts.shape[0] != expected_timesteps:
         file_to_delete = os.path.join(folder_path, filenames[i])
         print(f"Deleting: {file_to_delete}")
         os.remove(file_to_delete)
+        deleted_count += 1
+
+print(f"\nTotal deleted samples: {deleted_count}")
+
 
 ########################################################################################
 ##################### Reload the time series samples.###################################
