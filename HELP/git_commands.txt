@@ -1,0 +1,29 @@
+git init                    :Initialize a new git repository
+git clone URL.git           :Clonea remote repo to your local machine
+git add remote origin       :Add a remote repo as origin
+git add .git                :Stage all modified and new files for commit
+git add file_name           :Stage that file for commit
+git commit -m "description" :commit thestaged changes with a description
+git checkout branch_name    :Switch to differnt branch
+git checkout -b branch_name :Create and switch to that branch
+git branch branch_name      :Create that branch locally
+git branch                  :list of all the branches in that repo
+git push origin to_which branch 
+git push origin from:to
+git push origin from:to --force
+git merge branch_name       :Merge changes from another branch to your current branch 
+
+git status                  :status of the repo
+git diff --cached           :Shows the difference between staged changes and last commit
+
+git pull origin branch_name 
+git remote -v               :view the remote repository associated with your project
+git remote rename <old_name> <new_name> :renames the remote repo alias (origin=>upstream)
+
+
+
+mv old_name new_name
+rm -rf file_name
+mkdir folder_name
+cd 
+ls

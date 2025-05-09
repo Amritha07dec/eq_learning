@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
+#plt.switch_backend('TkAgg') 
 import seaborn as sns
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -104,6 +105,7 @@ def validate(model, val_loader, criterion):
 
 # Step 7: Plot confusion matrix
 def plot_confusion_matrix(model, dataloader):
+    print("Plotting confusion matrix...")
     model.eval()
     model.to(device)
 
@@ -125,3 +127,5 @@ def plot_confusion_matrix(model, dataloader):
     plt.ylabel('Actual')
     plt.title('Confusion Matrix')
     plt.show()
+    plt.savefig("confusion_matrix.png")
+print("Confusion matrix saved as confusion_matrix.png")
