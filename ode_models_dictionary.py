@@ -115,19 +115,6 @@ ode_systems = {
             ([10.0, 100.0, 8.0 / 3.0], [2.0, 2.0, 2.0], 'chaotic')     # Chaotic with different initial conditions
         ]
     },
-    'Van_der_Pol': {
-        'DCF_values': ['Poly', 3, 0],
-        'rhs_function': lambda t, y, params: [
-            y[1],                                       # dx/dt = y
-            params[0] * (1 - y[0]**2) * y[1] - y[0]     # dy/dt = mu * (1 - x^2) * y - x
-        ],
-        'parameters_and_IC': [
-            ([0.5], [1.0, 0.0], 'cyclic'),              # Cyclic for small mu
-            ([1.0], [0.0, 1.0], 'cyclic'),              # Moderate mu, cyclic
-            ([10.0], [2.0, 0.0], 'cyclic'),             # Larger mu, slower periodicity
-            ([20.0], [0.1, 0.1], 'cyclic')              # Very large mu, still cyclic
-        ]
-    },
     'Rossler': {
         'DCF_values': ['Poly', 2, 0],
         'rhs_function': lambda t, y, params: [
@@ -152,6 +139,49 @@ ode_systems = {
             ([12.0, 6], [1.0, 0.5, 0.5, 0.5, 1.0, 0.0], 'chaotic')     # 6D chaotic system
         ]
     },
+    'SIR': {
+    'DCF_values': ['Poly', 2, 0],
+    'rhs_function': lambda t, y, params: [
+        -params[0] * y[0] * y[1],                      # dS/dt = -beta * S * I
+        params[0] * y[0] * y[1] - params[1] * y[1],    # dI/dt = beta * S * I - gamma * I
+        params[1] * y[1]                               # dR/dt = gamma * I
+    ],
+    'parameters_and_IC': [
+        ([0.3, 0.1], [0.99, 0.01, 0.0], 'epidemic'),      # R0 = 3
+        ([0.2, 0.2], [0.99, 0.01, 0.0], 'threshold'),     # R0 = 1
+        ([0.1, 0.3], [0.99, 0.01, 0.0], 'fading_out'),     # R0 = 0.33
+        ([0.1, 0.2], [0.99, 0.01, 0.0], 'fading_out'),
+        ([0.5, 0.1], [0.99, 0.01, 1.0], 'fading_out'),  
+    ]
+},
+'Quadratic_Damped_Oscillator': {
+    'DCF_values': ['Poly', 2, 0],
+    'rhs_function': lambda t, y, params: [
+        y[1],
+        -params[0] * y[1] - params[1] * y[0] - params[2] * y[0]**2
+    ],
+    'parameters_and_IC': [
+        ([0.5, 1.0, 1.0], [1.0, 0.0], 'underdamped'),       # Less damping, oscillatory
+        ([2.0, 1.0, 1.0], [1.0, 0.0], 'overdamped'),        # High damping, non-oscillatory
+        ([0.1, 0.5, -1.0], [2.0, 0.0], 'unstable'),         # Negative nonlinearity, divergence
+    ]
+},
+
+
+    'Van_der_Pol': {
+        'DCF_values': ['Poly', 3, 0],
+        'rhs_function': lambda t, y, params: [
+            y[1],                                       # dx/dt = y
+            params[0] * (1 - y[0]**2) * y[1] - y[0]     # dy/dt = mu * (1 - x^2) * y - x
+        ],
+        'parameters_and_IC': [
+            ([0.5], [1.0, 0.0], 'cyclic'),              # Cyclic for small mu
+            ([1.0], [0.0, 1.0], 'cyclic'),              # Moderate mu, cyclic
+            ([10.0], [2.0, 0.0], 'cyclic'),             # Larger mu, slower periodicity
+            ([20.0], [0.1, 0.1], 'cyclic'),              # Very large mu, still cyclic
+        ]
+    },
+    
      'Duffing_Oscillator': {
          'DCF_values': ['Poly', 3, 0],
          'rhs_function': lambda t, y, params: [
@@ -163,17 +193,7 @@ ode_systems = {
              ([0.2, 1.0, 0.5, 0.8, 1.0], [0.5, 0.0], 'chaotic'),  # Chaotic motion
          ]
      },
-    'Quartic_Oscillator': {
-        'DCF_values': ['Poly', 4, 0],
-        'rhs_function': lambda t, y, params: [
-            y[1],  # dx/dt = y
-            -params[0] * y[0]**3 - params[1] * y[0]**4  # dy/dt = -x^3 - x^4
-        ],
-        'parameters_and_IC': [
-            ([1.0, 0.5], [1.0, 0.0], 'cyclic'),  # Cyclic motion with quartic interaction
-            ([1.0, 1.0], [0.5, 0.0], 'complex'),  # More complex motion due to quartic term
-        ]
-    },
+    
     'Lotka_Volterra_Cubic': {
         'DCF_values': ['Poly', 3, 0],
         'rhs_function': lambda t, y, params: [
@@ -183,6 +203,17 @@ ode_systems = {
         'parameters_and_IC': [
             ([1.0, 0.5, 0.1, 1.0, 0.1], [0.5, 1.0], 'cyclic'),  # Cyclic predator-prey dynamics
             ([1.0, 0.5, 0.3, 1.0, 0.2], [0.7, 0.5], 'complex'),  # More complex dynamics due to cubic interaction
+        ]
+    },
+    'Quartic_Oscillator': {
+        'DCF_values': ['Poly', 4, 0],
+        'rhs_function': lambda t, y, params: [
+            y[1],  # dx/dt = y
+            -params[0] * y[0]**3 - params[1] * y[0]**4  # dy/dt = -x^3 - x^4
+        ],
+        'parameters_and_IC': [
+            ([1.0, 0.5], [1.0, 0.0], 'cyclic'),  # Cyclic motion with quartic interaction
+            ([1.0, 1.0], [0.5, 0.0], 'complex'),  # More complex motion due to quartic term
         ]
     }
 }

@@ -5,8 +5,8 @@ from train import DataLoader
 from train import LSTMClassifier
 from train import train
 from train import plot_confusion_matrix
-from sample_generator.data import time_series_list
-from sample_generator.data import labels
+from ode_simulation.data import time_series_list
+from ode_simulation.data import labels
 
 import torch
 import torch.nn as nn
