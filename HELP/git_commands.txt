@@ -1,7 +1,7 @@
 git init                    :Initialize a new git repository
 git clone URL.git           :Clonea remote repo to your local machine
 git add remote origin       :Add a remote repo as origin
-git add .git                :Stage all modified and new files for commit
+git add .                :Stage all modified and new files for commit
 git add file_name           :Stage that file for commit
 git commit -m "description" :commit thestaged changes with a description
 git checkout branch_name    :Switch to differnt branch
