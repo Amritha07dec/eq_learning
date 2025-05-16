@@ -22,8 +22,8 @@ git remote rename <old_name> <new_name> :renames the remote repo alias (origin=>
 
 
 
-mv old_name new_name
-rm -rf file_name
-mkdir folder_name
-cd 
-ls
+mv old_name new_name        :rename a file
+rm -rf file_name            :force remove  a file/folder
+mkdir folder_name           :Create a folder
+cd                          :change directory
+ls                          :list of all files and folders in the directory
