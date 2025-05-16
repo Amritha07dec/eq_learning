@@ -1,6 +1,6 @@
 from data_preprocessing.extract import time_series_list
 from data_preprocessing.extract import filenames
-from data_preprocessing.extract import  folder_path
+from data_preprocessing.extract import folder_path
 import os
 import pickle
 import numpy as np
