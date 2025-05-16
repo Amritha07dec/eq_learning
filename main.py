@@ -5,8 +5,10 @@ from train import DataLoader
 from train import LSTMClassifier
 from train import train
 from train import plot_confusion_matrix
-from organized_trash.data import time_series_list
-from organized_trash.data import labels
+#from organized_trash.data import time_series_list
+#from organized_trash.data import labels
+from data_preprocessing.delete import time_series_list
+from data_preprocessing.delete import labels
 
 import torch
 import torch.nn as nn
