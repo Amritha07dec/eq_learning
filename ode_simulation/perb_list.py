@@ -1,4 +1,13 @@
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend suitable for SSH
+import matplotlib.pyplot as plt
+import os
+
 from ode_models_dictionary import ode_systems
+from ode_simulation.ode_simulator import simulate_ode_system
+from ode_simulation.ode_simulator import plot_phase_space
+from ode_simulation.ode_simulator import plot_trajectories
+import numpy as np
 
 # Example of how to access the rhs function and parameters_and_IC for the Lorenz system
 #system_name = 'Damped_Oscilllator'
