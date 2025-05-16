@@ -1,3 +1,5 @@
+from ode_models_dictionary import ode_systems
+
 # Example of how to access the rhs function and parameters_and_IC for the Lorenz system
 #system_name = 'Damped_Oscilllator'
 #system_name = 'Lorenz'                             #DCF=('Poly', 2, 0)
