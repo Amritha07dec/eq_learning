@@ -1,5 +1,5 @@
 """
-This code will let you visualise the time series for a given system name. 
+This code will let you visualise the time series for a given system name. for a single given parameter
 """
 # importing models dictionary
 import matplotlib
@@ -59,6 +59,7 @@ sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='
 output_folder = 'plots'
 os.makedirs(output_folder, exist_ok=True)
 
+#plotting for visualization
 plot_phase_space(sol)
 print(f"plotting phase space of {param_IC_index}")
 phase_filename = os.path.join(output_folder,f"{system_name}_set{param_IC_index}_phase_space.png")
