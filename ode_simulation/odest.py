@@ -11,7 +11,7 @@ import numpy as np
 
 # Example of how to access the rhs function and parameters_and_IC for the Lorenz system
 #system_name = 'Damped_Oscilllator'
-#system_name = 'Lorenz'                             #DCF=('Poly', 2, 0)
+system_name = 'Lorenz'                             #DCF=('Poly', 2, 0)
 #system_name = 'Van_der_Pol'                        #DCF=('Poly', 3, 0)
 #system_name = 'Lorenz96'                           #DCF=('Poly', 2, 0)
 #system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
@@ -66,7 +66,7 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         # Perturb initial conditions
         perturbed_ic = [ic + factor * ic for ic in initial_conditions]
 
-        print(f"\nSimulating {system_name} (Set {idx + 1}) with perturbation factor {factor}")
+        print(f"\nSimulating {system_name} (Set {idx}) with perturbation factor {factor}")
         print(f"Parameters: {params}")
         print(f"Initial conditions: {perturbed_ic}")
         print(f"Expected behavior: {description}")
@@ -80,14 +80,17 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         # Define and create output folder
         output_folder = 'plots'
         os.makedirs(output_folder, exist_ok=True)
-        plot_trajectories(sol)
 
         #plot_trajectories(sol)
-        traj_filename = os.path.join(output_folder,f"{system_name}_set{idx+1}_trajectory.png")
+        plot_trajectories(sol)
+        print(f"plotting trajectories of set:{idx}")
+
+        
+        traj_filename = os.path.join(output_folder,f"{system_name}_set{idx}_trajectory.png")
         plt.savefig(traj_filename)
         plt.close()
 
-
+    
         '''
         # Save sample
         time_series_sample = {
