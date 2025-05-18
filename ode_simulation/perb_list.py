@@ -32,7 +32,7 @@ sample_count = 0
 
 
 # Perturbation factors2
-perturbation_factors = [-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2]  # Original, +25%, -25%  -0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
+perturbation_factors = [0]  # Original, +25%, -25%  -0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
 
 # **LOOP OVER ALL SYSTEMS AND PARAMETER SETS**
 for system_name, system_data in ode_systems.items():
@@ -60,7 +60,7 @@ for system_name, system_data in ode_systems.items():
     for idx, (params, initial_conditions, description) in enumerate(parameters_and_IC):
         for factor in perturbation_factors:
             perturbed_ic = [ic + factor * ic for ic in initial_conditions]
-            print(f"\nSimulating {system_name} (Set {idx + 1})with perturbation factor {factor}")
+            print(f"\nSimulating {system_name} (Set {idx})with perturbation factor {factor}")
             print(f"Parameters: {params}")
             print(f"Initial conditions: {perturbed_ic}")
             print(f"Expected behavior: {description}")
@@ -73,8 +73,15 @@ for system_name, system_data in ode_systems.items():
             sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='RK45', t_eval=t_eval)
 
         # Plot results
+            # Define and create output folder
+            output_folder = 'plots'
+            os.makedirs(output_folder, exist_ok=True)
             #plot_phase_space(sol)
             plot_trajectories(sol)
+            print(f"plotting trajectories of set:{idx}")
+            traj_filename = os.path.join(output_folder,f"{system_name}_set{idx}_trajectory.png")
+            plt.savefig(traj_filename)
+            plt.close()
 
 # Simulating the Lorenz system with first set of parameters and initial conditions
 #t_span = (0, 20)
