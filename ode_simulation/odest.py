@@ -75,22 +75,20 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         t_span = (0, 20)
         t_eval = np.linspace(t_span[0], t_span[1], 10000)
         sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='RK45', t_eval=t_eval)
-
+        params_str = "_".join(map(str, params))
+        ic_str = "_".join(map(str, perturbed_ic))
         # Plot (optional)
         # Define and create output folder
         output_folder = 'plots'
         os.makedirs(output_folder, exist_ok=True)
+        plot_trajectories(sol)
 
         #plot_trajectories(sol)
-        plot_trajectories(sol)
-        print(f"plotting trajectories of set:{idx}")
-
-        
-        traj_filename = os.path.join(output_folder,f"{system_name}_set{idx}_trajectory.png")
+        traj_filename = os.path.join(output_folder,f"{system_name}_Set-{idx}_Perturb-{factor}_Params-{params_str}_IC-{ic_str}_trajectory.png")
         plt.savefig(traj_filename)
         plt.close()
 
-    
+
         '''
         # Save sample
         time_series_sample = {

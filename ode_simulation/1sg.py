@@ -51,7 +51,7 @@ print(f"Expected behavior: {description}")
 t_span = (0, 20)
 t_eval = np.linspace(t_span[0], t_span[1], 10000)
 
-sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='RK45', t_eval=t_eval)
+sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='LSODA', t_eval=t_eval)
 
 # Plot phase space and trajectories
 
@@ -66,7 +66,7 @@ os.makedirs(output_folder, exist_ok=True)
 #plt.savefig(phase_filename)
 #plt.close()
 plot_trajectories(sol)
-print(f"plotting trajectories of set:{param_IC_index}")
+print(f"plotting trajectories of {param_IC_index}")
 traj_filename = os.path.join(output_folder,f"{system_name}_set{param_IC_index}_trajectory.png")
 plt.savefig(traj_filename)
 plt.close()

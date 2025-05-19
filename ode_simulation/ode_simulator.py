@@ -5,8 +5,9 @@ from mpl_toolkits.mplot3d import Axes3D
 #import yaml
 
 from scipy.integrate import solve_ivp
+import os
 
-def simulate_ode_system(rhs_func, t_span, y0, params, solver='RK45', t_eval=None):
+def simulate_ode_system(rhs_func, t_span, y0, params, solver='LSODA', t_eval=None):
     """
     Simulate the ODE system.
 

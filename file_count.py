@@ -1,6 +1,6 @@
 import os
 
-folder_path = 'E:\Amritha\eq_learning\plots'  # Change this to your folder path
+folder_path = '/home/guest/Amritha/plots'  # Change this to your folder path
 
 file_count = sum(
     1 for file in os.listdir(folder_path)

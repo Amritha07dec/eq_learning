@@ -3,3 +3,6 @@ samples_generated (1).zip
 unzipped_sample/
 samples/
 plots/
+pickle_files/
+seperate_plots/
+lstm_model1.pth

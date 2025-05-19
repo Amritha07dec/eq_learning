@@ -26,13 +26,15 @@ import numpy as np
 #system_name = 'Linear_4D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
 #system_name = 'Linear_5D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
 #system_name = 'Duffing_Oscillator'                 #DCF=('Poly', 3, 0)
-#system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
+system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
 #system_name = 'Lotka_Volterra_Cubic'               #DCF=('Poly', 3, 0)
-#system_name = 'Quadratic_Damped_Oscillator'        #DCF=('Poly,2,0)
-#system_name = 'SIR'                                #DCF=('Poly,2,0)
-#system_name = 'Quartic_FitzHugh_Nagumo'
-#system_name = 'Neuron_Cubic_Model'
-system_name = 'Rössler_Cubic'
+#system_name = 'Quadratic_Damped_Oscillator'        #DCF=('Poly', 2, 0)
+#system_name = 'SIR'                                #DCF=('Poly', 2, 0)
+#system_name = 'Quartic_FitzHugh_Nagumo'            #DCF=('Poly', 4, 0)
+#system_name = 'Neuron_Cubic_Model'                 #DCF=('Poly', 3, 0)
+#system_name = 'Rössler_Cubic'                      #DCF=('Poly', 3, 0)
+#system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
+
 import os
 import pickle
 import glob
@@ -60,7 +62,7 @@ degree = system_data['DCF_values'][1]
 #print(f"Simulating {system_name} system with parameters: {params}")
 #print(f"Initial conditions: {initial_conditions}")
 #print(f"Expected behavior: {description}")
-perturbation_factors=[0]
+perturbation_factors=[-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2]
 
 # Loop over each parameter & initial condition set
 for idx, (params, initial_conditions, description) in enumerate(parameters_and_IC):
@@ -76,12 +78,14 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         # Solve the system
         t_span = (0, 20)
         t_eval = np.linspace(t_span[0], t_span[1], 10000)
-        sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='RK45', t_eval=t_eval)
+        sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='LSODA', t_eval=t_eval)
 
         # Plot (optional)
         #plot_trajectories(sol)
         # Define and create output folder
-        output_folder = 'plots'
+        params_str = "_".join(map(str, params))
+        ic_str = "_".join(map(str, perturbed_ic))
+        output_folder = 'seperate_plots'
         os.makedirs(output_folder, exist_ok=True)
 
         
@@ -93,7 +97,7 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         
         plot_trajectories(sol)
         print(f"plotting trajectories of set:{idx}")
-        traj_filename = os.path.join(output_folder,f"{system_name}_set{idx}_trajectory.png")
+        traj_filename = os.path.join(output_folder,f"{system_name}_Set-{idx}_Perturb-{factor}_Params-{params_str}_IC-{ic_str}_trajectory.png")
         plt.savefig(traj_filename)
         plt.close()
 
@@ -114,8 +118,8 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
 
         # Convert lists to strings for filenames
             #degree_str = "_".join(map(str, degree))
-        params_str = "_".join(map(str, params))
-        ic_str = "_".join(map(str, perturbed_ic))
+        #params_str = "_".join(map(str, params))
+        #ic_str = "_".join(map(str, perturbed_ic))
 
         # Store the relevant details in the file name
         file_name = os.path.join(folder_name, f"{system_name}_Set-{idx + 1}_Deg-{degree}_Params-{params_str}_IC-{ic_str}.pkl")

@@ -205,6 +205,31 @@ ode_systems = {
             ([1.0, 0.5, 0.3, 1.0, 0.2], [0.7, 0.5], 'complex'),  # More complex dynamics due to cubic interaction
         ]
     },
+    'Neuron_Cubic_Model': {
+        'DCF_values': ['Poly', 3, 0],
+        'rhs_function': lambda t, y, params: [
+            y[1],
+            -params[0] * y[0]**3 + params[1] * y[0]**2 - params[2] * y[1] + params[3]
+        ],
+        'parameters_and_IC': [
+            ([1.0, -1.5, 0.5, 0.0], [0.0, 0.0], 'resting'),           # neuron at rest
+            ([1.2, -1.8, 0.8, 0.1], [0.1, 0.0], 'spiking'),          # spike generation
+            ([1.5, -2.0, 1.0, 0.5], [0.5, 0.0], 'bursting')          # bursting pattern
+        ]
+    },
+    'Rössler_Cubic': {
+        'DCF_values': ['Poly', 3, 0],
+        'rhs_function': lambda t, y, params: [
+            -y[1] - y[2],
+            y[0] + params[0] * y[1],
+            params[1] + y[2] * (y[0] - params[2]) + params[3] * y[0]**3
+        ],
+        'parameters_and_IC': [
+            ([0.2, 0.2, 5.7, 0.0], [0.0, 1.0, 1.0], 'chaotic'),     # classic Rossler attractor
+            ([0.15, 0.15, 4.0, 0.3], [0.5, 0.5, 0.5], 'cubic_mod'),# cubic modifies z dynamics
+            ([0.1, 0.1, 3.5, 0.7], [1.0, 1.0, 1.0], 'complex')     # stronger cubic nonlinearity
+        ]
+    },
     'Quartic_Oscillator': {
         'DCF_values': ['Poly', 4, 0],
         'rhs_function': lambda t, y, params: [
@@ -244,32 +269,8 @@ ode_systems = {
             ([2.0, 0.25, 0.9, 0.8], [1.0, 0.0], 'bursting'),      # stronger nonlinearity → spiking
             ([4.0, 0.3, 0.8, 0.5], [1.5, 0.0], 'chaotic-like')    # intense quartic injection → irregularity
         ]
-    },
-    'Neuron_Cubic_Model': {
-        'DCF_values': ['Poly', 3, 0],
-        'rhs_function': lambda t, y, params: [
-            y[1],
-            -params[0] * y[0]**3 + params[1] * y[0]**2 - params[2] * y[1] + params[3]
-        ],
-        'parameters_and_IC': [
-            ([1.0, -1.5, 0.5, 0.0], [0.0, 0.0], 'resting'),           # neuron at rest
-            ([1.2, -1.8, 0.8, 0.1], [0.1, 0.0], 'spiking'),          # spike generation
-            ([1.5, -2.0, 1.0, 0.5], [0.5, 0.0], 'bursting')          # bursting pattern
-        ]
-    },
-    'Rössler_Cubic': {
-        'DCF_values': ['Poly', 3, 0],
-        'rhs_function': lambda t, y, params: [
-            -y[1] - y[2],
-            y[0] + params[0] * y[1],
-            params[1] + y[2] * (y[0] - params[2]) + params[3] * y[0]**3
-        ],
-        'parameters_and_IC': [
-            ([0.2, 0.2, 5.7, 0.0], [0.0, 1.0, 1.0], 'chaotic'),     # classic Rossler attractor
-            ([0.15, 0.15, 4.0, 0.3], [0.5, 0.5, 0.5], 'cubic_mod'),# cubic modifies z dynamics
-            ([0.1, 0.1, 3.5, 0.7], [1.0, 1.0, 1.0], 'complex')     # stronger cubic nonlinearity
-        ]
     }
+    
 
 
     }
