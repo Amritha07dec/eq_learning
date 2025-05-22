@@ -140,6 +140,6 @@ def plot_confusion_matrix(model, dataloader):
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title('Confusion Matrix')
-    plt.savefig("confusion_matrix_LSTM.png")
+    plt.savefig("confusion_matrix_LSTMlast.png")
     print("Confusion matrix saved as confusion_matrix.png")
     plt.show()
