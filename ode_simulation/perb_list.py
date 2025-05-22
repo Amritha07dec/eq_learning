@@ -32,7 +32,7 @@ sample_count = 0
 
 
 # Perturbation factors2
-perturbation_factors = [-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2]  # Original, +25%, -25%  -0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
+perturbation_factors = [0]  # Original, +25%, -25%  -0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
 
 # **LOOP OVER ALL SYSTEMS AND PARAMETER SETS**
 for system_name, system_data in ode_systems.items():
@@ -75,12 +75,13 @@ for system_name, system_data in ode_systems.items():
             ic_str = "_".join(map(str, perturbed_ic))
         # Plot results
             # Define and create output folder
-            output_folder = 'plots'
+            output_folder = 'seperate_plots_perb0'
             os.makedirs(output_folder, exist_ok=True)
             #plot_phase_space(sol)
             plot_trajectories(sol)
+
             print(f"plotting trajectories of set:{idx}")
-            traj_filename = os.path.join(output_folder,f"{system_name}_Set-{idx}_Perturb-{factor}_Params-{params_str}_IC-{ic_str}_trajectory.png")
+            traj_filename = os.path.join(output_folder,f"{system_name}_Set-{idx}_Deg-{degree}_Perturb-{factor}_Params-{params_str}_IC-{ic_str}_trajectory.png")
             plt.savefig(traj_filename)
             plt.close()
 
@@ -115,7 +116,7 @@ for system_name, system_data in ode_systems.items():
             #ic_str = "_".join(map(str, perturbed_ic))
 
         # Store the relevant details in the file name
-            file_name = os.path.join(folder_name, f"{system_name}_Set-{idx}_Deg-{degree}_Params-{params_str}_IC-{ic_str}.pkl")
+            file_name = os.path.join(folder_name, f"{system_name}_Set-{idx}_Deg-{degree}_Perturb-{factor}_Params-{params_str}_IC-{ic_str}.pkl")
  # Save the pickle file in the folder
 
             with open(file_name, "wb") as f:

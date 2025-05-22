@@ -6,3 +6,5 @@ plots/
 pickle_files/
 seperate_plots/
 lstm_model1.pth
+seperate_plots_perb0
+seperate_plots_perb-1

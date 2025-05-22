@@ -1,7 +1,7 @@
 # train_model.py
 from train import (
     pad_samples, split_data, TimeSeriesDataset,
-    LSTMClassifier, train
+    LSTMClassifier, train, Conv1DLSTMClassifier
 )
 from data_preprocessing.delete import time_series_list, labels
 import torch
@@ -22,7 +22,7 @@ train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
 # Initialize model, criterion, optimizer
-model = LSTMClassifier()
+model = Conv1DLSTMClassifier()
 model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -31,5 +31,5 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 train(model, train_loader, val_loader, criterion, optimizer, epochs=20)
 
 # Save model
-torch.save(model.state_dict(), "lstm_model.pth")
-print("✅ Model saved to lstm_model.pth")
+torch.save(model.state_dict(), "Conv1DLSTM_model.pth")
+print("✅ Model saved to Conv1DLSTM_model.pth")

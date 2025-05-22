@@ -43,6 +43,24 @@ class LSTMClassifier(nn.Module):
         _, (h_n, _) = self.lstm(x)
         out = self.fc(h_n[-1])
         return out
+    
+class Conv1DLSTMClassifier(nn.Module):
+    def __init__(self, input_size=6, conv_channels=32, lstm_hidden=64, num_classes=5):
+        super(Conv1DLSTMClassifier, self).__init__()
+        self.conv1d = nn.Conv1d(in_channels=input_size, out_channels=conv_channels, kernel_size=3, padding=1)
+        self.relu = nn.ReLU()
+        self.lstm = nn.LSTM(input_size=conv_channels, hidden_size=lstm_hidden, batch_first=True)
+        self.fc = nn.Linear(lstm_hidden, num_classes)
+
+    def forward(self, x):
+        # x: (batch, time, features) => transpose for Conv1D
+        x = x.transpose(1, 2)  # (batch, features, time)
+        x = self.relu(self.conv1d(x))  # Conv1D over time
+        x = x.transpose(1, 2)  # (batch, time, conv_channels)
+        _, (h_n, _) = self.lstm(x)
+        out = self.fc(h_n[-1])
+        return out
+
 
 # Train/Test split
 def split_data(samples, labels, test_size=0.2):
@@ -122,6 +140,6 @@ def plot_confusion_matrix(model, dataloader):
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title('Confusion Matrix')
-    plt.savefig("confusion_matrix.png")
+    plt.savefig("confusion_matrix_LSTM.png")
     print("Confusion matrix saved as confusion_matrix.png")
     plt.show()

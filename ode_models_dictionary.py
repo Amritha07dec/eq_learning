@@ -151,7 +151,7 @@ ode_systems = {
         ([0.2, 0.2], [0.99, 0.01, 0.0], 'threshold'),     # R0 = 1
         ([0.1, 0.3], [0.99, 0.01, 0.0], 'fading_out'),     # R0 = 0.33
         ([0.1, 0.2], [0.99, 0.01, 0.0], 'fading_out'),
-        ([0.5, 0.1], [0.99, 0.01, 1.0], 'fading_out'),  
+        ([0.5, 0.1], [0.99, 0.01, 1.0], 'fast_spread'),  
     ]
 },
 'Quadratic_Damped_Oscillator': {
@@ -163,7 +163,7 @@ ode_systems = {
     'parameters_and_IC': [
         ([0.5, 1.0, 1.0], [1.0, 0.0], 'underdamped'),       # Less damping, oscillatory
         ([2.0, 1.0, 1.0], [1.0, 0.0], 'overdamped'),        # High damping, non-oscillatory
-        ([0.1, 0.5, -1.0], [2.0, 0.0], 'unstable'),         # Negative nonlinearity, divergence
+        #([0.1, 0.5, -1.0], [2.0, 0.0], 'unstable'),         # Negative nonlinearity, divergence
     ]
 },
 
@@ -212,7 +212,7 @@ ode_systems = {
             -params[0] * y[0]**3 + params[1] * y[0]**2 - params[2] * y[1] + params[3]
         ],
         'parameters_and_IC': [
-            ([1.0, -1.5, 0.5, 0.0], [0.0, 0.0], 'resting'),           # neuron at rest
+            #([1.0, -1.5, 0.5, 0.0], [0.0, 0.0], 'resting'),           # neuron at rest
             ([1.2, -1.8, 0.8, 0.1], [0.1, 0.0], 'spiking'),          # spike generation
             ([1.5, -2.0, 1.0, 0.5], [0.5, 0.0], 'bursting')          # bursting pattern
         ]
@@ -230,6 +230,20 @@ ode_systems = {
             ([0.1, 0.1, 3.5, 0.7], [1.0, 1.0, 1.0], 'complex')     # stronger cubic nonlinearity
         ]
     },
+    'FitzHugh_Nagumo': {
+    'DCF_values': ['Poly', 3, 1],  # Cubic nonlinearity, interaction with w
+    'rhs_function': lambda t, y, params: [
+        y[0] - (y[0]**3) / 3 - y[1] + params[0],               # dv/dt = v - v^3/3 - w + I
+        params[1] * (y[0] + params[2] - params[3] * y[1])      # dw/dt = ε (v + a - b w)
+    ],
+    'parameters_and_IC': [
+        ([0.5, 0.08, 0.7, 0.8], [0.0, 0.0], 'excitable'),      # Excitable regime (single spike on perturbation)
+        ([1.0, 0.08, 0.7, 0.8], [0.0, 0.0], 'oscillatory'),    # Regular spiking
+        ([0.2, 0.05, 0.7, 0.5], [1.0, 1.0], 'damped'),         # Sub-threshold damped oscillation
+        ([1.2, 0.1, 0.7, 0.7], [0.5, 0.5], 'burst-like'),      # Strong input, burst-like patterns
+    ]
+},
+
     'Quartic_Oscillator': {
         'DCF_values': ['Poly', 4, 0],
         'rhs_function': lambda t, y, params: [
@@ -257,6 +271,7 @@ ode_systems = {
             ([3.0, 2.0, 1.0], [0.5, 0.6, 0.9], 'rich_dynamics')
         ]
     },
+  
     'Quartic_FitzHugh_Nagumo': {
         'DCF_values': ['Poly', 4, 0],
         'rhs_function': lambda t, y, params: [
@@ -269,7 +284,21 @@ ode_systems = {
             ([2.0, 0.25, 0.9, 0.8], [1.0, 0.0], 'bursting'),      # stronger nonlinearity → spiking
             ([4.0, 0.3, 0.8, 0.5], [1.5, 0.0], 'chaotic-like')    # intense quartic injection → irregularity
         ]
-    }
+    },
+    'Quartic_FitzHugh_Nagumo1': {
+    'DCF_values': ['Poly', 4, 1],  # Quartic polynomial nonlinearity, interaction with w
+    'rhs_function': lambda t, y, params: [
+        params[0]*y[0]**4 + params[1]*y[0]**3 + params[2]*y[0]**2 + params[3]*y[0] + params[4] - y[1],  # dv/dt = f(v) - w
+        params[5] * (y[0] - params[6] * y[1])  # dw/dt = ε (v - γ w)
+    ],
+    'parameters_and_IC': [
+        ([-1.0, 0.0, 2.0, 0.5, 0.0, 0.05, 1.0], [0.1, 0.0], 'excitable_quartic'),   # Quartic but similar to cubic FHN behavior
+        ([-1.0, 1.0, 0.0, 0.5, 0.0, 0.05, 1.0], [0.5, 0.0], 'complex_quartic'),     # More irregular limit cycle
+        ([0.5, -1.5, 0.0, 0.0, 0.0, 0.05, 1.0], [1.0, 0.0], 'bistable_quartic'),     # Bistable fixed points (multiple wells)
+        ([1.0, -3.0, 2.0, 0.0, 0.0, 0.05, 1.0], [0.5, 0.0], 'chaotic_like_quartic'), # Strong nonlinearity, sensitive to initial conditions
+    ]
+}
+
     
 
 
