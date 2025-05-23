@@ -4,9 +4,13 @@ from train import (
     LSTMClassifier, train, Conv1DLSTMClassifier
 )
 from data_preprocessing.delete import time_series_list, labels
+labels = [label - 1 for label in labels]
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)

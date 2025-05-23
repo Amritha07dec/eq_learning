@@ -34,7 +34,7 @@ class TimeSeriesDataset(Dataset):
 
 # Model
 class LSTMClassifier(nn.Module):
-    def __init__(self, input_size=6, hidden_size=64, num_layers=1, num_classes=5):
+    def __init__(self, input_size=6, hidden_size=64, num_layers=1, num_classes=4):
         super(LSTMClassifier, self).__init__()
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_size, num_classes)
@@ -45,13 +45,12 @@ class LSTMClassifier(nn.Module):
         return out
     
 class Conv1DLSTMClassifier(nn.Module):
-    def __init__(self, input_size=6, conv_channels=32, lstm_hidden=64, num_classes=5):
+    def __init__(self, input_size=6, conv_channels=32, lstm_hidden=64, num_classes=4):
         super(Conv1DLSTMClassifier, self).__init__()
         self.conv1d = nn.Conv1d(in_channels=input_size, out_channels=conv_channels, kernel_size=3, padding=1)
         self.relu = nn.ReLU()
         self.lstm = nn.LSTM(input_size=conv_channels, hidden_size=lstm_hidden, batch_first=True)
         self.fc = nn.Linear(lstm_hidden, num_classes)
-
     def forward(self, x):
         # x: (batch, time, features) => transpose for Conv1D
         x = x.transpose(1, 2)  # (batch, features, time)
@@ -117,7 +116,7 @@ def validate(model, val_loader, criterion):
     return total_loss / len(val_loader), accuracy
 
 # Confusion Matrix
-def plot_confusion_matrix(model, dataloader):
+def plot_confusion_matrix(model, dataloader, matrix_file_name):
     print("Plotting confusion matrix...")
     model.eval()
     model.to(device)
@@ -129,17 +128,18 @@ def plot_confusion_matrix(model, dataloader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             _, predicted = torch.max(outputs, 1)
-            all_preds.extend(predicted.cpu().numpy())
-            all_labels.extend(targets.cpu().numpy())
+            all_preds.extend(predicted.cpu().numpy() + 1)  # Shift to 1–4
+            all_labels.extend(targets.cpu().numpy() + 1)   # Shift to 1–4
+
 
     cm = confusion_matrix(all_labels, all_preds)
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
-                xticklabels=[f'Class {i}' for i in range(5)],
-                yticklabels=[f'Class {i}' for i in range(5)])
+                xticklabels=['class 1','Class 2', 'Class 3', 'Class 4'],
+                yticklabels=['class 1','Class 2', 'Class 3', 'Class 4'])
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title('Confusion Matrix')
-    plt.savefig("confusion_matrix_LSTMlast.png")
-    print("Confusion matrix saved as confusion_matrix.png")
+    plt.savefig(matrix_file_name)
+    print(f"Confusion matrix saved as {matrix_file_name}")
     plt.show()

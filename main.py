@@ -35,7 +35,7 @@ val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
 
 # Initialize your model loss and optimizer
-model = LSTMClassifier(input_size=6, hidden_size=64, num_layers=1, num_classes=5)
+model = LSTMClassifier(input_size=6, hidden_size=64, num_layers=1, num_classes=4)
 #model.load_state_dict(torch.load("lstm_model.pth", map_location=device))
 model.to(device)  # 👈 move model to GPU
 
@@ -50,5 +50,5 @@ train(model, dataloader, val_loader, criterion, optimizer, epochs=20)
 plot_confusion_matrix(model, val_loader)
 
 # Save the trained model
-torch.save(model.state_dict(), "lstm_model1.pth")
+torch.save(model.state_dict(), "lstm_model.pth")
 print("Model saved to lstm_model.pth")

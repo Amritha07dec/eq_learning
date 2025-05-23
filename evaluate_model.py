@@ -14,9 +14,9 @@ val_dataset = TimeSeriesDataset(X_val, y_val)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
 # Load model
-model = LSTMClassifier()
+model = Conv1DLSTMClassifier()
 #model.load_state_dict(torch.load("Conv1DLSTM_model.pth", map_location=device))
 model.to(device)
 
 # Plot confusion matrix
-plot_confusion_matrix(model, val_loader)
+plot_confusion_matrix(model, val_loader, matrix_file_name="conv1dlstm.png")
