@@ -128,15 +128,15 @@ def plot_confusion_matrix(model, dataloader, matrix_file_name):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             _, predicted = torch.max(outputs, 1)
-            all_preds.extend(predicted.cpu().numpy() + 1)  # Shift to 1–4
-            all_labels.extend(targets.cpu().numpy() + 1)   # Shift to 1–4
+            all_preds.extend(predicted.cpu().numpy())  
+            all_labels.extend(targets.cpu().numpy())   
 
 
     cm = confusion_matrix(all_labels, all_preds)
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
                 xticklabels=['class 1','Class 2', 'Class 3', 'Class 4'],
-                yticklabels=['class 1','Class 2', 'Class 3', 'Class 4'])
+                yticklabels=['class 1','Class 2', 'Class 3', 'Class 4'])  #
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title('Confusion Matrix')
