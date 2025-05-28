@@ -92,7 +92,7 @@ ode_systems = {
             -params[4] * y[0]  # dx5/dt = -e * x1
         ],
         'parameters_and_IC': [
-            ([1.0, 1.0, 1.0, 1.0, 1.0], [1.0, 0.0, 0.0, 0.0, 0.0], 'cyclic'),  # Cyclic with clear oscillations
+            ([1.0, 1.0, 1.0, 1.0, 1.0], [1.0, 0.1, 0.1, 0.1, 0.1], 'cyclic'),  # Cyclic with clear oscillations
             ([0.5, 0.5, 0.5, 0.5, 0.5], [1.0, 110.0, 110.0, 10.0, -20.0], 'slower cyclic')  # Slower cyclic behavior
         ]
     },
@@ -237,8 +237,8 @@ ode_systems = {
         params[1] * (y[0] + params[2] - params[3] * y[1])      # dw/dt = ε (v + a - b w)
     ],
     'parameters_and_IC': [
-        ([0.5, 0.08, 0.7, 0.8], [0.0, 0.0], 'excitable'),      # Excitable regime (single spike on perturbation)
-        ([1.0, 0.08, 0.7, 0.8], [0.0, 0.0], 'oscillatory'),    # Regular spiking
+        ([0.5, 0.08, 0.7, 0.8], [1.1, 1.1], 'excitable'),      # Excitable regime (single spike on perturbation)
+        ([1.0, 0.08, 0.7, 0.8], [0.5, 0.5], 'oscillatory'),    # Regular spiking
         ([0.2, 0.05, 0.7, 0.5], [1.0, 1.0], 'damped'),         # Sub-threshold damped oscillation
         ([1.2, 0.1, 0.7, 0.7], [0.5, 0.5], 'burst-like'),      # Strong input, burst-like patterns
     ]
@@ -271,21 +271,7 @@ ode_systems = {
             ([3.0, 2.0, 1.0], [0.5, 0.6, 0.9], 'rich_dynamics')
         ]
     },
-  
     'Quartic_FitzHugh_Nagumo': {
-        'DCF_values': ['Poly', 4, 0],
-        'rhs_function': lambda t, y, params: [
-            y[0] - y[0]**3 - y[1] + params[0] * y[0]**4,  # dv/dt
-            params[1] * (y[0] - params[2] * y[1] + params[3])  # dw/dt
-        ],
-        'parameters_and_IC': [
-            ([0.5, 0.08, 1.0, 0.7], [0.0, 0.0], 'stable'),        # small quartic term → near fixed point
-            ([1.0, 0.2, 1.0, 0.7], [0.5, 0.0], 'oscillatory'),    # regular limit cycle oscillations
-            ([2.0, 0.25, 0.9, 0.8], [1.0, 0.0], 'bursting'),      # stronger nonlinearity → spiking
-            ([4.0, 0.3, 0.8, 0.5], [1.5, 0.0], 'chaotic-like')    # intense quartic injection → irregularity
-        ]
-    },
-    'Quartic_FitzHugh_Nagumo1': {
     'DCF_values': ['Poly', 4, 1],  # Quartic polynomial nonlinearity, interaction with w
     'rhs_function': lambda t, y, params: [
         params[0]*y[0]**4 + params[1]*y[0]**3 + params[2]*y[0]**2 + params[3]*y[0] + params[4] - y[1],  # dv/dt = f(v) - w
@@ -304,3 +290,18 @@ ode_systems = {
 
     }
 
+"""
+    'Quartic_FitzHugh_Nagumo': {
+        'DCF_values': ['Poly', 4, 0],
+        'rhs_function': lambda t, y, params: [
+            y[0] - y[0]**3 - y[1] + params[0] * y[0]**4,  # dv/dt
+            params[1] * (y[0] - params[2] * y[1] + params[3])  # dw/dt
+        ],
+        'parameters_and_IC': [
+            ([0.5, 0.08, 1.0, 0.7], [0.0, 0.0], 'stable'),        # small quartic term → near fixed point
+            ([1.0, 0.2, 1.0, 0.7], [0.5, 0.0], 'oscillatory'),    # regular limit cycle oscillations
+            ([2.0, 0.25, 0.9, 0.8], [1.0, 0.0], 'bursting'),      # stronger nonlinearity → spiking
+            ([4.0, 0.3, 0.8, 0.5], [1.5, 0.0], 'chaotic-like')    # intense quartic injection → irregularity
+        ]
+    },
+"""
