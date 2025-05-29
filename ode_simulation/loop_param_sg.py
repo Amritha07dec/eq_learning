@@ -29,11 +29,12 @@ import numpy as np
 #system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
 #system_name = 'Lotka_Volterra_Cubic'               #DCF=('Poly', 3, 0)
 #system_name = 'Quadratic_Damped_Oscillator'        #DCF=('Poly', 2, 0)
-#system_name = 'SIR'                                #DCF=('Poly', 2, 0)
-system_name = 'Quartic_FitzHugh_Nagumo1'            #DCF=('Poly', 4, 0)
+system_name = 'SIR'                                #DCF=('Poly', 2, 0)
+#system_name = 'Quartic_FitzHugh_Nagumo'            #DCF=('Poly', 4, 0)
 #system_name = 'Neuron_Cubic_Model'                 #DCF=('Poly', 3, 0)
 #system_name = 'Rössler_Cubic'                      #DCF=('Poly', 3, 0)
 #system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
+#system_name = 'FitzHugh_Nagumo'
 
 import os
 import pickle
@@ -62,7 +63,7 @@ degree = system_data['DCF_values'][1]
 #print(f"Simulating {system_name} system with parameters: {params}")
 #print(f"Initial conditions: {initial_conditions}")
 #print(f"Expected behavior: {description}")
-perturbation_factors=[0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2] #-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
+perturbation_factors=[-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2] #-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
 
 # Loop over each parameter & initial condition set
 for idx, (params, initial_conditions, description) in enumerate(parameters_and_IC):
