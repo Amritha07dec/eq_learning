@@ -29,14 +29,20 @@ import numpy as np
 #system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
 #system_name = 'Lotka_Volterra_Cubic'               #DCF=('Poly', 3, 0)
 #system_name = 'Quadratic_Damped_Oscillator'        #DCF=('Poly,2,0)
-system_name = 'SIR'                                #DCF=('Poly,2,0)
+#system_name = 'SIR'                                #DCF=('Poly,2,0)
+#system_name = 'Quartic_FitzHugh_Nagumo'            #DCF=('Poly', 4, 0)
+#system_name = 'Neuron_Cubic_Model'                 #DCF=('Poly', 3, 0)
+#system_name = 'Rössler_Cubic'                      #DCF=('Poly', 3, 0)
+#system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
+system_name = 'FitzHugh_Nagumo'
+                            
 
 
 rhs_func = ode_systems[system_name]['rhs_function']
 parameters_and_IC = ode_systems[system_name]['parameters_and_IC']
 
 # Accessing a specific pair of parameters and initial conditions for the selected system
-param_IC_index = 1
+param_IC_index = 0
 
 
 params = parameters_and_IC[param_IC_index][0]  # Parameter values
@@ -48,10 +54,10 @@ print(f"Initial conditions: {initial_conditions}")
 print(f"Expected behavior: {description}")
 
 # Simulating the Lorenz system with first set of parameters and initial conditions
-t_span = (0, 20)
-t_eval = np.linspace(t_span[0], t_span[1], 10000)
+t_span = (0, 100)
+t_eval = np.linspace(t_span[0], t_span[1], 70000)
 
-sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='LSODA', t_eval=t_eval)
+sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='RK45', t_eval=t_eval)
 
 # Plot phase space and trajectories
 
