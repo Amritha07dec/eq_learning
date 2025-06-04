@@ -47,8 +47,39 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # Train model
-train(model, train_loader, val_loader, criterion, optimizer, epochs=40)
+#train(model, train_loader, val_loader, criterion, optimizer, epochs=40)
+train_losses, val_losses, train_accs, val_accs = train(
+    model, train_loader, val_loader, criterion, optimizer, epochs=40
+)
+###Learning curve plots###
+import matplotlib.pyplot as plt
+
+epochs_range = range(1, len(train_losses) + 1)
+
+plt.figure(figsize=(10, 4))
+
+# Loss plot
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, train_losses, label='Train Loss')
+plt.plot(epochs_range, val_losses, label='Validation Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Loss Curve')
+plt.legend()
+
+# Accuracy plot
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, train_accs, label='Train Accuracy')
+plt.plot(epochs_range, val_accs, label='Validation Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.title('Accuracy Curve')
+plt.legend()
+
+plt.tight_layout()
+plt.savefig("learning_curve.png")
+print("📊 Learning curve saved to learning_curve.png")
 
 # Save model
-torch.save(model.state_dict(), "Conv1DLSTM_model.pth")
-print("✅ Model saved to Conv1DLSTM_model.pth")
+torch.save(model.state_dict(), "today_Conv1DLSTM_model.pth")
+print("✅ Model saved to today_Conv1DLSTM_model.pth")
