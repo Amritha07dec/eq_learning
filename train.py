@@ -60,12 +60,42 @@ class Conv1DLSTMClassifier(nn.Module):
         out = self.fc(h_n[-1])
         return out
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class AttentionLSTMClassifier(nn.Module):
+    def __init__(self, input_size=6, hidden_size=64, num_layers=1, num_classes=4):
+        super(AttentionLSTMClassifier, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        
+        # Attention layer (1-layer MLP that scores each hidden state)
+        self.attn_layer = nn.Linear(hidden_size, 1)
+        
+        self.fc = nn.Linear(hidden_size, num_classes)
+
+    def forward(self, x):
+        # x shape: (batch, time, input_size)
+        lstm_out, _ = self.lstm(x)  # lstm_out shape: (batch, time, hidden_size)
+
+        # Compute attention scores
+        attn_scores = self.attn_layer(lstm_out)  # (batch, time, 1)
+        attn_weights = F.softmax(attn_scores, dim=1)  # (batch, time, 1)
+
+        # Compute context vector as weighted sum of hidden states
+        context = torch.sum(attn_weights * lstm_out, dim=1)  # (batch, hidden_size)
+
+        out = self.fc(context)  # (batch, num_classes)
+        return out
+
+
 
 # Train/Test split
 def split_data(samples, labels, test_size=0.2):
     return train_test_split(samples, labels, test_size=test_size, random_state=42)
 
 # Training
+"""
 def train(model, dataloader, val_loader, criterion, optimizer, epochs=10):
     model.to(device)
     model.train()
@@ -93,6 +123,93 @@ def train(model, dataloader, val_loader, criterion, optimizer, epochs=10):
 
         val_loss, val_acc = validate(model, val_loader, criterion)
         print(f"Validation Loss: {val_loss:.4f} | Validation Accuracy: {val_acc:.2f}%")
+"""
+####saves the best model
+"""
+def train(model, dataloader, val_loader, criterion, optimizer, epochs=10):
+    model.to(device)
+    best_val_acc = 0.0  # Track best validation accuracy
+
+    for epoch in range(epochs):
+        model.train()
+        total_loss = 0.0
+        correct = 0
+        total = 0
+
+        for inputs, targets in dataloader:
+            inputs, targets = inputs.to(device), targets.to(device)
+
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+            _, predicted = torch.max(outputs, 1)
+            correct += (predicted == targets).sum().item()
+            total += targets.size(0)
+
+        acc = 100 * correct / total
+        print(f"Epoch {epoch+1}/{epochs} | Loss: {total_loss:.4f} | Accuracy: {acc:.2f}%")
+
+        val_loss, val_acc = validate(model, val_loader, criterion)
+        print(f"Validation Loss: {val_loss:.4f} | Validation Accuracy: {val_acc:.2f}%")
+
+        # Save the best model
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), "best_model.pth")
+            print(f"✅ Best model saved at Epoch {epoch+1} with Val Accuracy: {val_acc:.2f}%")
+"""
+def train(model, dataloader, val_loader, criterion, optimizer, epochs=10):
+    model.to(device)
+    best_val_acc = 0.0
+
+    train_losses = []
+    val_losses = []
+    train_accuracies = []
+    val_accuracies = []
+
+    for epoch in range(epochs):
+        model.train()
+        total_loss = 0.0
+        correct = 0
+        total = 0
+
+        for inputs, targets in dataloader:
+            inputs, targets = inputs.to(device), targets.to(device)
+
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+            _, predicted = torch.max(outputs, 1)
+            correct += (predicted == targets).sum().item()
+            total += targets.size(0)
+
+        train_acc = 100 * correct / total
+        train_loss = total_loss / len(dataloader)
+
+        val_loss, val_acc = validate(model, val_loader, criterion)
+
+        train_losses.append(train_loss)
+        val_losses.append(val_loss)
+        train_accuracies.append(train_acc)
+        val_accuracies.append(val_acc)
+
+        print(f"Epoch {epoch+1}/{epochs} | Loss: {train_loss:.4f} | Accuracy: {train_acc:.2f}%")
+        print(f"Validation Loss: {val_loss:.4f} | Validation Accuracy: {val_acc:.2f}%")
+
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), "best_model.pth")
+            print(f"✅ Best model saved at Epoch {epoch+1} with Val Accuracy: {val_acc:.2f}%")
+
+    return train_losses, val_losses, train_accuracies, val_accuracies
 
 # Validation
 def validate(model, val_loader, criterion):
