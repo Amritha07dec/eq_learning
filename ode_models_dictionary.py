@@ -38,7 +38,103 @@ ode_systems = {
     # ------------------
     #
     # """
-    'Linear_1D': {
+    ### Degree 4
+
+
+'Quartic_Coupled_2D': {
+    'DCF_values': ['Poly', 4, 1],
+    'rhs_function': lambda t, y, p: [
+        -p[0]*y[0]**4 + p[1]*y[1],
+        -p[2]*y[1]**4 + p[3]*y[0]
+    ],
+    'parameters_and_IC': [
+        ([1.0, 0.5, 1.0, 0.5], [0.8, 0.8], 'mutual quartic'),
+        ([0.5, 1.0, 0.5, 1.0], [0.5, -0.5], 'oscillatory/quartic')
+    ]
+},
+    'Anharmonic_Oscillator': {
+    'DCF_values': ['Poly', 4, 0],
+    'rhs_function': lambda t, y, p: [y[1], -p[0]*y[0] - p[1]*y[0]**3 - p[2]*y[0]**4],
+    'parameters_and_IC': [
+        ([0.5, 1.0, 1.0], [1.0, 0.0], 'soft nonlinearity'),
+        ([1.0, -1.0, 2.0], [0.8, 0.2], 'mixed signs'),
+    ]
+},
+    'Modified_Duffing': {
+    'DCF_values': ['Poly', 4, 0],
+    'rhs_function': lambda t, y, p: [y[1], -p[0]*y[0] - p[1]*y[0]**3 - p[2]*y[0]**4],
+    'parameters_and_IC': [
+        ([1.0, 0.0, 1.0], [1.0, 0.0], 'quartic_only'),
+        ([1.0, -1.0, 1.0], [0.5, 0.5], 'cubic+quartic'),
+    ]
+},
+'Quartic_Oscillator': {
+        'DCF_values': ['Poly', 4, 0],
+        'rhs_function': lambda t, y, params: [
+            y[1],  # dx/dt = y
+            -params[0] * y[0]**3 - params[1] * y[0]**4  # dy/dt = -x^3 - x^4
+        ],
+        'parameters_and_IC': [
+            ([1.0, 0.5], [1.0, 0.0], 'cyclic'),  # Cyclic motion with quartic interaction
+            ([1.0, 1.0], [0.5, 0.0], 'complex'),  # More complex motion due to quartic term
+        ]
+    },
+    'Chemical_Kinetics': {
+        'DCF_values': ['Poly', 4, 0],
+        'rhs_function': lambda t, y, params: [
+            -params[0] * y[0]**2 + params[1] * y[1]**4 - params[2] * y[2],
+            params[0] * y[0]**2 - params[1] * y[1]**4,
+            params[2] * y[1] - y[2]
+        ],
+        'parameters_and_IC': [
+            ([1.0, 0.5, 0.2], [1.0, 0.5, 0.1], 'transient'),
+            ([2.0, 1.0, 0.5], [2.0, 1.0, 0.1], 'nonlinear_flow'),
+            ([0.8, 1.2, 0.4], [0.1, 0.9, 0.8], 'damped'),
+            ([1.5, 0.7, 0.3], [0.9, 0.2, 0.6], 'bistable'),
+            ([2.5, 1.3, 0.6], [1.1, 0.3, 0.1], 'spiking'),
+            ([3.0, 2.0, 1.0], [0.5, 0.6, 0.9], 'rich_dynamics')
+        ]
+    },
+    'Quartic_FitzHugh_Nagumo': {
+    'DCF_values': ['Poly', 4, 1],  # Quartic polynomial nonlinearity, interaction with w
+    'rhs_function': lambda t, y, params: [
+        params[0]*y[0]**4 + params[1]*y[0]**3 + params[2]*y[0]**2 + params[3]*y[0] + params[4] - y[1],  # dv/dt = f(v) - w
+        params[5] * (y[0] - params[6] * y[1])  # dw/dt = ε (v - γ w)
+    ],
+    'parameters_and_IC': [
+        ([-1.0, 0.0, 2.0, 0.5, 0.0, 0.05, 1.0], [0.1, 0.0], 'excitable_quartic'),   # Quartic but similar to cubic FHN behavior
+        ([-1.0, 1.0, 0.0, 0.5, 0.0, 0.05, 1.0], [0.5, 0.0], 'complex_quartic'),     # More irregular limit cycle
+        ([0.5, -1.5, 0.0, 0.0, 0.0, 0.05, 1.0], [1.0, 0.0], 'bistable_quartic'),     # Bistable fixed points (multiple wells)
+        ([1.0, -3.0, 2.0, 0.0, 0.0, 0.05, 1.0], [0.5, 0.0], 'chaotic_like_quartic'), # Strong nonlinearity, sensitive to initial conditions
+    ]
+},
+'Quartic_Potential_2D': {
+    'DCF_values': ['Poly', 4, 0],
+    'rhs_function': lambda t, y, p: [
+        -p[0]*y[0]**3 - p[1]*y[0]**4,
+        -p[2]*y[1]**3 - p[3]*y[1]**4
+    ],
+    'parameters_and_IC': [
+        ([1.0, 0.5, 1.0, 0.5], [0.9, 0.9], 'decoupled quartic gradient'),
+        ([0.5, 1.0, 0.5, 1.0], [1.0, -1.0], 'symmetric'),
+    ]
+},
+'Rossler': {
+        'DCF_values': ['Poly', 2, 0],
+        'rhs_function': lambda t, y, params: [
+            -y[1] - y[2],                               # dx/dt = -y - z
+            y[0] + params[0] * y[1],                    # dy/dt = x + a * y
+            params[1] + y[2] * (y[0] - params[2])       # dz/dt = b + z * (x - c)
+        ],
+        'parameters_and_IC': [
+            ([0.2, 0.2, 5.7], [1.0, 1.0, 1.0], 'chaotic'),  # Classic chaotic behavior
+            ([0.1, 0.1, 6.0], [0.5, 0.5, 0.5], 'cyclic'),  # Cyclic with modified parameters
+            ([0.2, 0.2, 10.0], [1.0, 0.0, 0.0], 'chaotic') # Chaotic with higher c
+        ]
+    }
+}
+"""
+  'Linear_1D': {
         'DCF_values': ['Poly', 1, 0],
         'rhs_function': lambda t, y, params: [params[0] * y[0]],  # Single state: dx/dt = a * x (no cyclic behavior)
         'parameters_and_IC': [
@@ -96,12 +192,12 @@ ode_systems = {
             ([0.5, 0.5, 0.5, 0.5, 0.5], [1.0, 110.0, 110.0, 10.0, -20.0], 'slower cyclic')  # Slower cyclic behavior
         ]
     },
-    # """
+    # 
     #
     # Non-linear systems
     # ------------------
     #
-    # """
+
     'Lorenz': {
         'DCF_values': ['Poly', 2, 0],
         'rhs_function': lambda t, y, params: [
@@ -242,86 +338,11 @@ ode_systems = {
         ([0.2, 0.05, 0.7, 0.5], [1.0, 1.0], 'damped'),         # Sub-threshold damped oscillation
         ([1.2, 0.1, 0.7, 0.7], [0.5, 0.5], 'burst-like'),      # Strong input, burst-like patterns
     ]
-},
+}
+}
 
-    'Quartic_Oscillator': {
-        'DCF_values': ['Poly', 4, 0],
-        'rhs_function': lambda t, y, params: [
-            y[1],  # dx/dt = y
-            -params[0] * y[0]**3 - params[1] * y[0]**4  # dy/dt = -x^3 - x^4
-        ],
-        'parameters_and_IC': [
-            ([1.0, 0.5], [1.0, 0.0], 'cyclic'),  # Cyclic motion with quartic interaction
-            ([1.0, 1.0], [0.5, 0.0], 'complex'),  # More complex motion due to quartic term
-        ]
-    },
-    'Chemical_Kinetics': {
-        'DCF_values': ['Poly', 4, 0],
-        'rhs_function': lambda t, y, params: [
-            -params[0] * y[0]**2 + params[1] * y[1]**4 - params[2] * y[2],
-            params[0] * y[0]**2 - params[1] * y[1]**4,
-            params[2] * y[1] - y[2]
-        ],
-        'parameters_and_IC': [
-            ([1.0, 0.5, 0.2], [1.0, 0.5, 0.1], 'transient'),
-            ([2.0, 1.0, 0.5], [2.0, 1.0, 0.1], 'nonlinear_flow'),
-            ([0.8, 1.2, 0.4], [0.1, 0.9, 0.8], 'damped'),
-            ([1.5, 0.7, 0.3], [0.9, 0.2, 0.6], 'bistable'),
-            ([2.5, 1.3, 0.6], [1.1, 0.3, 0.1], 'spiking'),
-            ([3.0, 2.0, 1.0], [0.5, 0.6, 0.9], 'rich_dynamics')
-        ]
-    },
-    'Quartic_FitzHugh_Nagumo': {
-    'DCF_values': ['Poly', 4, 1],  # Quartic polynomial nonlinearity, interaction with w
-    'rhs_function': lambda t, y, params: [
-        params[0]*y[0]**4 + params[1]*y[0]**3 + params[2]*y[0]**2 + params[3]*y[0] + params[4] - y[1],  # dv/dt = f(v) - w
-        params[5] * (y[0] - params[6] * y[1])  # dw/dt = ε (v - γ w)
-    ],
-    'parameters_and_IC': [
-        ([-1.0, 0.0, 2.0, 0.5, 0.0, 0.05, 1.0], [0.1, 0.0], 'excitable_quartic'),   # Quartic but similar to cubic FHN behavior
-        ([-1.0, 1.0, 0.0, 0.5, 0.0, 0.05, 1.0], [0.5, 0.0], 'complex_quartic'),     # More irregular limit cycle
-        ([0.5, -1.5, 0.0, 0.0, 0.0, 0.05, 1.0], [1.0, 0.0], 'bistable_quartic'),     # Bistable fixed points (multiple wells)
-        ([1.0, -3.0, 2.0, 0.0, 0.0, 0.05, 1.0], [0.5, 0.0], 'chaotic_like_quartic'), # Strong nonlinearity, sensitive to initial conditions
-    ]
-},
-    'Quartic_Potential_2D': {
-    'DCF_values': ['Poly', 4, 0],
-    'rhs_function': lambda t, y, p: [
-        -p[0]*y[0]**3 - p[1]*y[0]**4,
-        -p[2]*y[1]**3 - p[3]*y[1]**4
-    ],
-    'parameters_and_IC': [
-        ([1.0, 0.5, 1.0, 0.5], [0.9, 0.9], 'decoupled quartic gradient'),
-        ([0.5, 1.0, 0.5, 1.0], [1.0, -1.0], 'symmetric'),
-    ]
-},
-    'Quartic_Coupled_2D': {
-    'DCF_values': ['Poly', 4, 1],
-    'rhs_function': lambda t, y, p: [
-        -p[0]*y[0]**4 + p[1]*y[1],
-        -p[2]*y[1]**4 + p[3]*y[0]
-    ],
-    'parameters_and_IC': [
-        ([1.0, 0.5, 1.0, 0.5], [0.8, 0.8], 'mutual quartic'),
-        ([0.5, 1.0, 0.5, 1.0], [0.5, -0.5], 'oscillatory/quartic')
-    ]
-},
-    'Anharmonic_Oscillator': {
-    'DCF_values': ['Poly', 4, 0],
-    'rhs_function': lambda t, y, p: [y[1], -p[0]*y[0] - p[1]*y[0]**3 - p[2]*y[0]**4],
-    'parameters_and_IC': [
-        ([0.5, 1.0, 1.0], [1.0, 0.0], 'soft nonlinearity'),
-        ([1.0, -1.0, 2.0], [0.8, 0.2], 'mixed signs'),
-    ]
-},
-    'Modified_Duffing': {
-    'DCF_values': ['Poly', 4, 0],
-    'rhs_function': lambda t, y, p: [y[1], -p[0]*y[0] - p[1]*y[0]**3 - p[2]*y[0]**4],
-    'parameters_and_IC': [
-        ([1.0, 0.0, 1.0], [1.0, 0.0], 'quartic_only'),
-        ([1.0, -1.0, 1.0], [0.5, 0.5], 'cubic+quartic'),
-    ]
-},
+    ############validation set of systems############
+
 'Cubic_Damped_Oscillator': {
     'DCF_values': ['Poly', 3, 0],
     'rhs_function': lambda t, y, params: [
@@ -445,7 +466,5 @@ ode_systems = {
         ([1.0, 4], [1.0, 0.0, 0.0, 0.0], '4D_cyclic'),
         ([0.8, 6], [0.5] * 6, '6D_damped')
     ]
-}
-
-}
-
+},
+"""

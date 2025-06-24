@@ -212,6 +212,7 @@ def train(model, dataloader, val_loader, criterion, optimizer, epochs=10):
     return train_losses, val_losses, train_accuracies, val_accuracies
 
 # Validation
+"""
 def validate(model, val_loader, criterion):
     model.eval()
     model.to(device)
@@ -231,6 +232,54 @@ def validate(model, val_loader, criterion):
 
     accuracy = 100 * correct / total
     return total_loss / len(val_loader), accuracy
+"""
+
+def validate(model, val_loader, criterion, return_all=False):
+    model.eval()
+    model.to(device)
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    all_confidences = []
+    all_predictions = []
+    all_targets = []
+    all_probs = []  # Store full softmax distributions
+
+    with torch.no_grad():
+        for inputs, targets in val_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            total_loss += loss.item()
+
+            probs = torch.softmax(outputs, dim=1)
+            confidences, predicted = torch.max(probs, 1)
+
+            correct += (predicted == targets).sum().item()
+            total += targets.size(0)
+
+            all_confidences.extend(confidences.cpu().numpy())
+            all_predictions.extend(predicted.cpu().numpy())
+            all_targets.extend(targets.cpu().numpy())
+            all_probs.extend(probs.cpu().numpy())  # Store full prob vector
+
+    accuracy = 100 * correct / total
+    avg_conf = np.mean(all_confidences)
+    print(f"🔎 Average Confidence: {avg_conf:.4f}")
+
+    # Print top 5 low-confidence predictions
+    low_conf_indices = np.argsort(all_confidences)[:5]
+    for i in low_conf_indices:
+        print(f"⚠️ Low confidence: Pred={all_predictions[i]}, True={all_targets[i]}, Confidence={all_confidences[i]:.4f}")
+        print(f"   Class Probabilities: {np.round(all_probs[i], 4)}")
+
+    if return_all:
+        return total_loss / len(val_loader), accuracy, all_predictions, all_confidences, all_targets, all_probs
+
+    return total_loss / len(val_loader), accuracy
+
+
 
 # Confusion Matrix
 def plot_confusion_matrix(model, dataloader, matrix_file_name):
@@ -259,4 +308,4 @@ def plot_confusion_matrix(model, dataloader, matrix_file_name):
     plt.title('Confusion Matrix')
     plt.savefig(matrix_file_name)
     print(f"Confusion matrix saved as {matrix_file_name}")
-    plt.show()
+    plt.show() 

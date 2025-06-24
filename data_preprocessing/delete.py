@@ -11,11 +11,11 @@ import numpy as np
 
 
 expected_timesteps = 10000  # The number of time steps you're expecting
-
+"""
 for i, ts in enumerate(time_series_list):
     if ts.shape[0] != expected_timesteps:
         print(f"Sample {i}: shape {ts.shape}, file: {filenames[i]}")
-
+"""
 #########################################################################################
 ###################delete non-matching shaped samples####################################
 
@@ -29,6 +29,8 @@ for i, ts in enumerate(time_series_list):
         deleted_count += 1
 
 print(f"\nTotal deleted samples: {deleted_count}")
+#################################################################################
+
 
 
 ########################################################################################
@@ -39,7 +41,7 @@ labels = []
 filenames = []
 
 
-"""is it necessary for the neural network to have data  and labels in lists"""
+
 
 
 for filename in os.listdir(folder_path):
@@ -47,7 +49,7 @@ for filename in os.listdir(folder_path):
         #print(f"Loading file: {filename}")    #This line shows the filename
         file_path = os.path.join(folder_path, filename)
         with open(file_path, 'rb') as f:
-            data = pickle.load(f)
+            data = pickle.load(f, encoding='latin1')
             sol = data["Time series"]  # shape: (10000, num_features)
             degree = data["degree"]    # class label: 0, 1, 2, or 3
 
@@ -65,7 +67,7 @@ for filename in os.listdir(folder_path):
 
 print(f"Loaded {len(time_series_list)} samples.")
 print(f"First sample shape: {time_series_list[0].shape}")
-print(f"First label: {labels[0]}")
+print(f"First label: {labels[1]}")
 
 
 

@@ -3,25 +3,27 @@ import numpy as np
 
 ############################################################
 #########EXTRACT ZIP files##################################
+"""
+zip_path = '/home/guest/Amritha/samples.zip'
+import os
 
-zip_path = '/home/guest/Amritha/samples_generated (1).zip'
-extract_folder = '/home/guest/Amritha/unzipped_sample'
+extract_folder = '/home/guest/Amritha/unzipped_sample832'
+os.makedirs(extract_folder, exist_ok=True)
+
 
 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
     zip_ref.extractall(extract_folder)
-
+"""
 import os
 import pickle
 
 
-# Replace this with your actual folder path inside Google Drive
-folder_path = '/home/guest/Amritha/unzipped_sample'
+# Replace this with your actual pickle folder path 
+folder_path = '/home/guest/Amritha/pickle_files_val_104'
 
 time_series_list = []
 labels = []
 filenames = []
-
-"""is it necessary for the neural network to have data  and labels in lists"""
 
 
 for filename in os.listdir(folder_path):
@@ -29,7 +31,7 @@ for filename in os.listdir(folder_path):
         #print(f"Loading file: {filename}")  # 👈 This line shows the filename
         file_path = os.path.join(folder_path, filename)
         with open(file_path, 'rb') as f:
-            data = pickle.load(f)
+            data = pickle.load(f, encoding='latin1')
             sol = data["Time series"]  # shape: (10000, num_features)
             degree = data["degree"]    # class label: 0, 1, 2, or 3
 
@@ -51,6 +53,10 @@ print(f"First label: {labels[1]}")
 #    return time_series_list, labels, filenames
 
 #get_values()
-
-#for i, ts in enumerate(time_series_list):
-#    print(f"Sample {i}: shape {ts.shape} filename: {filenames[i]}")
+"""
+for i, ts in enumerate(time_series_list):
+    print(f"Sample {i}: shape {ts.shape} filename: {filenames[i]}")
+"""
+print(f"Loaded {len(time_series_list)} samples.")
+print(f"First sample shape: {time_series_list[0].shape}")
+print(f"First label: {labels[1]}")

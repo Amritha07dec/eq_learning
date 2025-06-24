@@ -49,7 +49,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 # Train model
 #train(model, train_loader, val_loader, criterion, optimizer, epochs=40)
 train_losses, val_losses, train_accs, val_accs = train(
-    model, train_loader, val_loader, criterion, optimizer, epochs=40
+    model, train_loader, val_loader, criterion, optimizer, epochs=100
 )
 ###Learning curve plots###
 import matplotlib.pyplot as plt
@@ -77,9 +77,26 @@ plt.title('Accuracy Curve')
 plt.legend()
 
 plt.tight_layout()
-plt.savefig("learning_curve.png")
-print("📊 Learning curve saved to learning_curve.png")
+plt.savefig("memeconv.png")
+print("📊 Learning curve saved to memeconv.png")
 
+#Add a quick check for NANs/INF before saving
+for name, param in model.named_parameters():
+    if torch.isnan(param).any() or torch.isinf(param).any():
+        print(f"⚠️ Warning: Parameter {name} has NaNs or Infs!")
 # Save model
-torch.save(model.state_dict(), "today_Conv1DLSTM_model.pth")
-print("✅ Model saved to today_Conv1DLSTM_model.pth")
+# torch.save(model.state_dict(), "today_Conv1DLSTM_model.pth")
+# print("✅ Model saved to today_Conv1DLSTM_model.pth")
+
+# Move model to CPU before saving (avoids CUDA memory pointer issues)
+model_cpu = model.to("cpu")
+
+# Save using context manager
+with open("memeconv.pth", "wb") as f:
+    torch.save(model_cpu.state_dict(), f)
+
+# Move it back to original device (optional)
+model.to(device)
+
+###torch.save(model.state_dict(), "today_lstm_model.pth")
+print("✅ Model saved to memeconv.pth")

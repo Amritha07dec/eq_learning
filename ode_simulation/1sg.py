@@ -19,7 +19,7 @@ import numpy as np
 #system_name = 'Lorenz'                             #DCF=('Poly', 2, 0)
 #system_name = 'Van_der_Pol'                        #DCF=('Poly', 3, 0)
 #system_name = 'Lorenz96'                           #DCF=('Poly', 2, 0)
-#system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
+system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
 #system_name = 'Linear_1D'                          #DCF=('Poly', 1, 0)
 #system_name = 'Linear_2D_Harmonic_Oscillator'      #DCF=('Poly', 1, 0)
 #system_name = 'Linear_3D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
@@ -34,7 +34,7 @@ import numpy as np
 #system_name = 'Neuron_Cubic_Model'                 #DCF=('Poly', 3, 0)
 #system_name = 'Rössler_Cubic'                      #DCF=('Poly', 3, 0)
 #system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
-system_name = 'FitzHugh_Nagumo'
+#system_name = 'FitzHugh_Nagumo'
                             
 
 
@@ -54,15 +54,15 @@ print(f"Initial conditions: {initial_conditions}")
 print(f"Expected behavior: {description}")
 
 # Simulating the Lorenz system with first set of parameters and initial conditions
-t_span = (0, 100)
-t_eval = np.linspace(t_span[0], t_span[1], 70000)
+t_span = (0, 20)
+t_eval = np.linspace(t_span[0], t_span[1], 10000)
 
 sol = simulate_ode_system(rhs_func, t_span, initial_conditions, params, solver='RK45', t_eval=t_eval)
 
 # Plot phase space and trajectories
 
 # Define and create output folder
-output_folder = 'plots'
+output_folder = 'amritha'
 os.makedirs(output_folder, exist_ok=True)
 
 #plotting for visualization

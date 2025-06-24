@@ -1,5 +1,5 @@
 # evaluate_model.py
-from train import LSTMClassifier,Conv1DLSTMClassifier, pad_samples, split_data, TimeSeriesDataset, plot_confusion_matrix
+from train import LSTMClassifier,Conv1DLSTMClassifier, AttentionLSTMClassifier, pad_samples, split_data, TimeSeriesDataset, plot_confusion_matrix
 from data_preprocessing.delete import time_series_list, labels
 import torch
 from torch.utils.data import DataLoader
@@ -15,9 +15,9 @@ val_dataset = TimeSeriesDataset(X_val, y_val)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
 # Load model
-model = Conv1DLSTMClassifier()
-model.load_state_dict(torch.load("Conv1DLSTM_model.pth", map_location=device))
+model = LSTMClassifier()
+model.load_state_dict(torch.load("/home/guest/Amritha/memeconv.pth", map_location=device))
 model.to(device)
 
 # Plot confusion matrix
-plot_confusion_matrix(model, val_loader, matrix_file_name="conv1dlstm.png")
+plot_confusion_matrix(model, val_loader, matrix_file_name="memeconv.png")

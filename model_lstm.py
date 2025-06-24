@@ -46,7 +46,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 # Train model
 #train(model, train_loader, val_loader, criterion, optimizer, epochs=40)
 train_losses, val_losses, train_accs, val_accs = train(
-    model, train_loader, val_loader, criterion, optimizer, epochs=10
+    model, train_loader, val_loader, criterion, optimizer, epochs=40
 )
 ###Learning curve plots###
 import matplotlib.pyplot as plt
@@ -74,8 +74,8 @@ plt.title('Accuracy Curve')
 plt.legend()
 
 plt.tight_layout()
-plt.savefig("learning_curve.png")
-print("📊 Learning curve saved to learning_curve.png")
+plt.savefig("3_deg_vallearning_curve832_1layer_lstm.png")
+print("📊 Learning curve saved to 3_deg_vallearning_curve832_1layer_lstm.png")
 
 #Add a quick check for NANs/INF before saving
 for name, param in model.named_parameters():
@@ -90,11 +90,11 @@ for name, param in model.named_parameters():
 model_cpu = model.to("cpu")
 
 # Save using context manager
-with open("1_layer_lstm_model_1312.pth", "wb") as f:
+with open("3_deg_val832_1layer_lstm.pth", "wb") as f:
     torch.save(model_cpu.state_dict(), f)
 
 # Move it back to original device (optional)
 model.to(device)
 
 ###torch.save(model.state_dict(), "today_lstm_model.pth")
-print("✅ Model saved to 1_layer_lstm_model_1312.pth")
+print("✅ Model saved to 3_deg_val832_1layer_lstm.pth")

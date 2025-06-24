@@ -29,7 +29,12 @@ model.to(device)
 
 
 criterion = nn.CrossEntropyLoss()
-val_loss, val_acc = validate(model, unseen_loader, criterion)
+#val_loss, val_acc = validate(model, unseen_loader, criterion)
+val_loss, val_acc, preds, confs, targets, probs = validate(model, unseen_loader, criterion, return_all=True)
+for i in range(len(preds)):
+    print(f"Sample {i}: True={targets[i]}, Pred={preds[i]}, Confidence={confs[i]:.4f}")
+    print(f"  Probabilities: {np.round(probs[i], 4)}")
+
 print(f"Unseen Data - Loss: {val_loss:.4f}, Accuracy: {val_acc:.2f}%")
 
 
