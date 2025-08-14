@@ -19,26 +19,19 @@ import numpy as np
 #system_name = 'Lorenz'                             #DCF=('Poly', 2, 0)
 #system_name = 'Van_der_Pol'                        #DCF=('Poly', 3, 0)
 #system_name = 'Lorenz96'                           #DCF=('Poly', 2, 0)
-system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
+#system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
 #system_name = 'Linear_1D'                          #DCF=('Poly', 1, 0)
 #system_name = 'Linear_2D_Harmonic_Oscillator'      #DCF=('Poly', 1, 0)
 #system_name = 'Linear_3D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
 #system_name = 'Linear_4D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
 #system_name = 'Linear_5D_Coupled_Oscillators'      #DCF=('Poly', 1, 0)
 #system_name = 'Duffing_Oscillator'                 #DCF=('Poly', 3, 0)
-#system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
 #system_name = 'Lotka_Volterra_Cubic'               #DCF=('Poly', 3, 0)
 #system_name = 'Quadratic_Damped_Oscillator'        #DCF=('Poly', 2, 0)
 #system_name = 'SIR'                                #DCF=('Poly', 2, 0)
-#system_name = 'Quartic_FitzHugh_Nagumo'            #DCF=('Poly', 4, 0)
 #system_name = 'Neuron_Cubic_Model'                 #DCF=('Poly', 3, 0)
 #system_name = 'Rössler_Cubic'                      #DCF=('Poly', 3, 0)
-#system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
 #system_name = 'FitzHugh_Nagumo'                    #DCF=('Poly', 3, 0)
-#system_name = 'Quartic_Potential_2D'               #DCF=('Poly', 4, 0)
-#system_name = 'Quartic_Coupled_2D'                 #DCF=('Poly', 4, 0)
-#system_name = 'Anharmonic_Oscillator'              #DCF=('Poly', 4, 0)
-#system_name = 'Modified_Duffing'                   #DCF=('Poly', 4, 0)
 #system_name = 'Cubic_Damped_Oscillator'            #DCF=('Poly', 3, 0)
 #system_name = 'Cubic_Reaction'                     #DCF=('Poly', 3, 0)
 #system_name = 'Cubic_Pendulum'                     #DCF=('Poly', 3, 0)            
@@ -50,7 +43,19 @@ system_name = 'Rossler'                            #DCF=('Poly', 2, 0)
 #system_name = 'Linear_4D_Chain'                    #DCF=('Poly', 1, 0)
 #system_name = 'Linear_2D_Cross_Coupled'            #DCF=('Poly', 1, 0)
 #system_name = 'Linear_ND_Chain_Oscillator'         #DCF=('Poly', 1, 0)
-
+#ystem_name = 'Quartic_Potential_2D'               #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Coupled_2D'                 #DCF=('Poly', 4, 0)
+#system_name = 'Anharmonic_Oscillator'              #DCF=('Poly', 4, 0)
+#system_name = 'Modified_Duffing'                   #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_FitzHugh_Nagumo'            #DCF=('Poly', 4, 0)
+#system_name = 'Chemical_Kinetics'                  #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Oscillator'                 #DCF=('Poly', 4, 0)
+#system_name = 'Anharmonic_Oscillator'              #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Lorenz'                     #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Neuron'                     #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Lotka_Volterra'             #DCF=('Poly', 4, 0)
+#system_name = 'Quartic_Cascade_3D'                 #DCF=('Poly', 4, 0)
+system_name = 'Quartic_Hamiltonian_1D'                 #DCF=('Poly', 4, 0)
 import os
 import pickle
 import glob
@@ -78,7 +83,7 @@ degree = system_data['DCF_values'][1]
 #print(f"Simulating {system_name} system with parameters: {params}")
 #print(f"Initial conditions: {initial_conditions}")
 #print(f"Expected behavior: {description}")
-perturbation_factors=[0,0.1,-0.15,0.15,-0.2,0.2] #-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
+perturbation_factors=[-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2] #-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
 ##0,-0.05,0.05,-0.1, 0.1,-0.15,0.15,-0.2,0.2,-0.25, 0.25,-0.3,0.3,-0.35,0.35,-0.4,0.4,-0.45,0.45, -0.5, 0.5,-0.55,0.55,-0.6,0.6,-0.65,0.65,-0.7,0.7, 0.75, -0.75,-0.8,0.8,-0.85,0.85,-0.9,0.9, -0.95,0.95,1,-1.05,1.05,-1.1, 1.1,-1.15,1.15,-1.2,1.2, -1.25, 1.25,-1.3,1.3,-1.35,1.35,-1.4,1.4,-1.45,1.45, -1.5, 1.5,-1.55,1.55,-1.6,1.6,-1.65,1.65,-1.7,1.7,-1.75, 1.75,-1.8,1.8,-1.85,1.85,-1.9,1.9, -1.95,1.95, -2, 2
 
 # Loop over each parameter & initial condition set
@@ -102,7 +107,7 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
         # Define and create output folder
         params_str = "_".join(map(str, params))
         ic_str = "_".join(map(str, perturbed_ic))
-        output_folder = 'meme'
+        output_folder = 'Quartic_Potential_2Dplt'
         os.makedirs(output_folder, exist_ok=True)
 
         
@@ -129,7 +134,7 @@ for idx, (params, initial_conditions, description) in enumerate(parameters_and_I
 
 
         # Define the folder name for pickle file (generated sample)
-        folder_name = "meme"
+        folder_name ='Quartic_Potential_2Dpkl' ###change the folder and put it in quotes
         # Create the folder if it doesn't exist
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)

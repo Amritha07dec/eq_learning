@@ -19,10 +19,11 @@ import pickle
 
 
 # Replace this with your actual pickle folder path 
-folder_path = '/home/guest/Amritha/pickle_files_val_104'
+folder_path = '/home/guest/Amritha/Testing.pkl' #Validation #Training #Testing
 
 time_series_list = []
 labels = []
+
 filenames = []
 
 

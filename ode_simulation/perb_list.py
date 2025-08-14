@@ -1,8 +1,3 @@
-
-
-
-
-
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend suitable for SSH
 import matplotlib.pyplot as plt
@@ -61,7 +56,7 @@ sample_count = 0
 # Perturbation factors2
 #0,-0.05,0.05,-0.1, 0.1,-0.15,0.15,-0.2,0.2,-0.25, 0.25,-0.3,0.3,-0.35,0.35,-0.4,0.4,-0.45,0.45, -0.5, 0.5,-0.55,0.55,-0.6,0.6,-0.65,0.65,-0.7,0.7, 0.75, -0.75,-0.8,0.8,-0.85,0.85,-0.9,0.9, -0.95,0.95,1,-1.05,1.05,-1.1, 1.1,-1.15,1.15,-1.2,1.2, -1.25, 1.25,-1.3,1.3,-1.35,1.35,-1.4,1.4,-1.45,1.45, -1.5, 1.5,-1.55,1.55,-1.6,1.6,-1.65,1.65,-1.7,1.7,-1.75, 1.75,-1.8,1.8,-1.85,1.85,-1.9,1.9, -1.95,1.95, -2, 2
  # Original, +25%, -25%  -0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, -1, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2
-perturbation_factors = [-0.25, 0.0, 0.25, -0.5, 0.5, 0.75, -0.75, 1, -1.25, 1.25, -1.5, 1.5, -1.75, 1.75, -2, 2] 
+perturbation_factors = [-1] 
 
 # **LOOP OVER ALL SYSTEMS AND PARAMETER SETS**
 for system_name, system_data in ode_systems.items():
@@ -99,12 +94,12 @@ for system_name, system_data in ode_systems.items():
          # Solve the system
             t_span = (0, 20)
             t_eval = np.linspace(t_span[0], t_span[1], 10000)
-            sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='BDF', t_eval=t_eval)
+            sol = simulate_ode_system(rhs_func, t_span, perturbed_ic, params, solver='RK45', t_eval=t_eval)
             params_str = "_".join(map(str, params))
             ic_str = "_".join(map(str, perturbed_ic))
         # Plot results
             # Define and create output folder
-            output_folder = '4_deg_plots'
+            output_folder = "zeroic_data.plt"
             os.makedirs(output_folder, exist_ok=True)
             #plot_phase_space(sol)
             plot_trajectories(sol)
@@ -134,7 +129,7 @@ for system_name, system_data in ode_systems.items():
 
 
         # Define the folder name for pickle file (generated sample)
-            folder_name = "4_deg_pickle_files"
+            folder_name = "zero_data.pkl"
         # Create the folder if it doesn't exist
             if not os.path.exists(folder_name):
                 os.makedirs(folder_name)
